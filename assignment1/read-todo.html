@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Read todo</title>
+    <script type="text/javascript">
+        async function read() {
+            
+            let resp = await fetch("/todo")
+            let data = await resp.json()
+    
+            console.table(data);
+            let table = document.createElement("table");
+            let headers = document.createElement("tr");
+            for(title in data[0])
+            {
+                let cell = document.createElement("td");
+                cell.innerText = title;
+                headers.appendChild(cell);
+            }
+            table.appendChild(headers);
+            table.border = "1";
+            for (row of data) {
+                let tr = document.createElement("tr");
+                let cell = document.createElement("td");
+                cell.appendChild(document.createTextNode(row["userId"]))
+                tr.appendChild(cell);
+    
+                let cell2 = document.createElement("td");
+                cell2.appendChild(document.createTextNode(row["id"]))
+                tr.appendChild(cell2);
+    
+                let cell3 = document.createElement("td");
+                cell3.appendChild(document.createTextNode(row["title"]))
+                tr.appendChild(cell3)
+    
+                let cell4 = document.createElement("td");
+                cell4.appendChild(document.createTextNode(row['completed']));
+                tr.appendChild(cell4);
+    
+                table.appendChild(tr);
+    
+            }
+            document.querySelector("body").appendChild(table);
+        }
+        
+    </script>
+</head>
+
+<body onload="read()">
+    <h1>Todo.json</h1>
+    <div>
+
+    </div>
+</body>
+
+
+</html>

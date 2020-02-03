@@ -27,6 +27,10 @@ hbs.registerHelper("table", function(num){
     return generate(num)
 })
 
+hbs.registerHelper("notfound", function(){
+    let x = Math.floor((Math.random() * 50 +1))
+    return new hbs.handlebars.SafeString(getLost(x))
+})
 app.get("/index", function(req, res){
     res.render("index")
 })
@@ -37,6 +41,10 @@ app.post("/results" , function(req, res){
     res.render("table.hbs", {number: req.body.option})
 })
 
+
+app.get("/*" , function(req, res){
+    res.render("error")
+})
 const port = 8080
 app.listen(port, ()=>console.log(`Server running on http://localhost:${port}/index`))
 
@@ -62,4 +70,41 @@ function generate(side_length){
     }
     table += "</table>"
     return new hbs.handlebars.SafeString(table);
+}
+
+
+function lostDiv(){
+    let decider = (Math.floor(Math.random() * 3) + 1)
+    let cssClass = "";
+    switch(decider)
+    {
+        case 1:
+            cssClass = "rotate"
+            break;
+        case 2:
+            cssClass = "still"
+            break;
+        case 3:
+            cssClass = "shrink"
+            break;
+        default:
+            console.log(`AAAAAAAAAAA`);
+            
+    }
+    let div = `<div class = '${cssClass}'>404</div>`
+    return div;
+}
+
+
+function getLost(num){
+
+    let main = "<div>";
+    let count = 0;
+    while(count < num)
+    {
+        main += lostDiv();
+        count++;
+    }
+    main += "</div>";
+    return main;
 }

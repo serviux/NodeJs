@@ -96,10 +96,11 @@ function lostDiv(){
 }
 
 
-function getLost(num){
+function getLost(){
 
     let main = "<div>";
     let count = 0;
+    let num = (Math.random() * 50) + 21
     while(count < num)
     {
         main += lostDiv();

@@ -1,11 +1,10 @@
-const bt = require("./Boat")
+
 const bd = require("./Board")
 
 class BoardManager{
     constructor()
     {
         this.board = new bd.Board(5)
-        this.enemyBoard = new bd.Board(5)
         this.boatList = []
     }
 
@@ -90,9 +89,6 @@ class BoardManager{
     }
 }
 
-let mgr = new BoardManager()
-let boat1 = new bt.Boat(3)
-mgr.addBoat(boat1)
-mgr.board.display()
-mgr.takeHit(0,1)
-mgr.board.display()
+module.exports = {
+    BoardManager
+}

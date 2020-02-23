@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employees</title>
+    {{> styles}}
+</head>
+
+<body>
+    {{> nav}}
+    <main class="col-md-10 mx-auto">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">Job Title</th>
+                    <th scope="col">Salary</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+
+    </main>
+</body>
+<script>
+    let tbody = document.querySelector('tbody')
+    async function getEmployees()
+    {
+        let url = "/employees-json"
+        let resp = await fetch(url)
+        let json = await resp.json()
+        return json
+        
+    }
+    getEmployees().then((data) => {
+        debugger;
+        for(result of data)
+        {
+            
+            let tr = document.createElement("tr")
+            tr.id = result._id
+            tr.classList.add("pointer")
+            tr.addEventListener("click", function(){
+                id = this.id;
+                window.location.href = "/employees/id/" + id
+
+            })
+            let td1 = document.createElement("td")
+            td1.innerText = result.FirstName
+            let td2 = document.createElement("td")
+            td2.innerText = result.LastName 
+            let td3 = document.createElement("td")
+            td3.innerText = result.Department
+            let td4 = document.createElement("td")
+            td4.innerText = result.StartDate
+            let td5 = document.createElement("td")
+            td5.innerText = result.Title
+            let td6 = document.createElement("td")
+            td6.innerText = result.Salary 
+            tr.appendChild(td1)
+            tr.appendChild(td2)
+            tr.appendChild(td3)
+            tr.appendChild(td4)
+            tr.appendChild(td5)
+            tr.appendChild(td6)
+            tbody.appendChild(tr)
+        }
+    })
+</script>
+
+</html>

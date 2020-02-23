@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Employees</title>
+    {{>styles}}
+<script>
+    function gotoAction(link)
+    {
+        window.location.href = link
+    }
+</script>
+</head>
+
+<body>
+    {{>nav}}
+<main class="col-md-10 mx-auto">
+    <h2>{{emp.FirstName}} {{emp.LastName}}</h2>
+    <h3>{{emp.Department}} - {{emp.Title}}</h3>
+    <h4>Start Date: {{formatDate emp.StartDate}}</h4>
+    <h4>Salary: ${{emp.Salary}}</h4>
+    <a class= "pointer link" id ="edit" onclick="gotoAction('/employees/edit/id/{{emp._id}}')">Edit</a>
+    <a class= "pointer link" id ="delete" onclick="gotoAction('/employees/delete/id/{{emp._id}}')">Delete</a>
+</main>
+</body>
+
+
+</html>

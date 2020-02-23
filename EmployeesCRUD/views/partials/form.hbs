@@ -1,0 +1,34 @@
+<form method="POST" action="/{{action}}">
+        <div class="form-group">
+            <label for="FirstName">First Name</label>
+            <input type="text" class="form-control" id="FirstName" name="FirstName" placeholder="Jeff" value="{{emp.FirstName}}">
+        </div>
+        <div class="form-group">
+            <label for="LastName">Last Name</label>
+            <input type="text" class="form-control" id="LastName" name="LastName" placeholder="Jeffington" value="{{emp.LastName}}">
+        </div>
+        <div class="form-group">
+            <label for="Department">Example select</label>
+            <select class="form-control" id="Department" name="Department">
+                <option value = "sales">Sales</option>
+                <option value = "engineering">Engineering</option>
+                <option value = "administration">Administration</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="StartDate">Start Date</label>
+            <input type="month" class="form-control" id="StartDate" name="StartDate" placeholder="2/17/20" value="{{emp.StartDate}}">
+        </div>
+        <div class="form-group">
+            <label for="Title">Job Title</label>
+            <input type="text" class="form-control" id="Title" name="Title" placeholder="Senior Frontend Dev." value="{{emp.Title}}">
+        </div>
+           <div class="form-group">
+            <label for="Salary">Salary</label>
+            <input type="number" class="form-control" id="Salary" name="Salary" placeholder="50000" value="{{emp.Salary}}">
+        </div>
+         </div>
+           <div class="form-group">
+            <input type="submit" class="btn btn-success" value ="Submit">
+        </div>
+    </form>

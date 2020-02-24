@@ -52,7 +52,10 @@ app.get("/employees/edit/id/:empId", async function(req,res){
     {
         action = "Edit/" + id
         res.render("edit.hbs", {emp:emp, action:action})
-    }   
+    }else{
+	res.statusCode = 404
+	res.render("error")
+    }
 
 })
 
@@ -61,6 +64,9 @@ app.get("/employees/delete/id/:empId", async function(req,res){
     let result = await Employee.deleteOne({_id: id})
     if (result.n > 0){
         res.render("delete.hbs")
+    } else {
+    	res.statusCode = 404
+	res.render("error")
     }
 
 })

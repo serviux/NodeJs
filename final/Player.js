@@ -8,7 +8,8 @@ const bt = require("./Boat")
 class Player {
     constructor() {
         this.PlayerBoard = new mgr.BoardManager()
-        this.EnemyBoard = new mgr.BoardManager()
+    	this.hasUserInput = false
+	    this.EnemyBoard = new mgr.BoardManager()
         let boat = new bt.Boat(3)
         this.PlayerBoard.addBoat(boat)
         
@@ -20,7 +21,7 @@ class Player {
             console.log("Reply: " + reply.toString())
         })
 
-        await this.req.send()
+        
     }
     async initAsClient(){
         this.sock = zmq.socket("rep")
@@ -31,9 +32,44 @@ class Player {
     }
 
     
-    async send()
+    async sendAttack(attack_coords)
     {
-        this.sock.send("Hello")
+        let msg_str = ""
+        msg_str += Messages.SEND_ATTACK_COORDS + ":" 
+        msg_str += attack_coords.join(",") 
+        this.sock.send(msg_str)
+    }
+
+    async sendBadCoords(msg)
+    {
+        this.sock.send(msg)
+    }
+
+    async handle_response(resp_message)
+    {
+        let message_type = parseInt(resp_message.split(":")[0])
+        let resp_to_send = ""
+
+        switch(message_type)
+        {
+            
+            case Messages.ATTACK_RESPONSE:
+                //given string "1:1,1"
+                //msg_coords = [0, 1]
+                let msg_coords = resp_message.split(":")[1].split(',').map( x=> parseInt(x))
+                let handled_message = this.PlayerBoard.takeHit(msg_coords[0], msg_coords[1])
+                if (handled_message === Messages.BAD_ATTACK_COORDS) {
+                    bad_coords = `${Messages.BAD_ATTACK_COORDS}:${msg_coords.join(',')}`
+                    this.sendBadCoords(bad_coords)
+                }
+                
+                break;
+            
+            case Messages.GAME_OVER:
+                break;
+
+        }
+
     }
 
     display() {
@@ -66,7 +102,8 @@ class Player {
 
         coords.push(await inq.prompt(questX).then(answers => answers["x"]))
         coords.push(await inq.prompt(questY).then(answers => answers["y"]))
-        return coords
+	this.hasUserInput = true    	
+	return coords
     }
 
     destroy(){
@@ -81,8 +118,11 @@ async function main() {
 
     let coords = await player.getInput()
     console.log(await coords)
-
+    
     player.destroy()
 }
 
-main()
+
+module.exports = {
+    Player
+}

@@ -3,9 +3,11 @@
 const MESSAGES =  {
     GAME_OVER: 0,
     GET_EMEMY_ATTACK_COORDS: 1,
-    SEND_ATTACK_COORDS: 2,
-    END_MESSAGE: 3,
+    BAD_ATTACK_COORDS: 2,
+    ATTACK_HIT: 3,
+    ATTACK_MISS: 4,
+    ATTACK_RESPONSE: 5
 
 }
 
-module.exports = { MESSAGES}
+module.exports = {MESSAGES}

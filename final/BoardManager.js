@@ -1,6 +1,6 @@
 
 const bd = require("./Board")
-
+const Messages = require("./messages").MESSAGES
 class BoardManager{
     constructor()
     {
@@ -62,6 +62,9 @@ class BoardManager{
         }
     }
 
+
+    //returns the proper message based in the 
+    //respective 
     takeHit(x, y)
     {
         let tile = this.board.getTile(x,y)
@@ -70,21 +73,25 @@ class BoardManager{
             case bd.Board.TILES.values[bd.Board.TILES.BOAT]:
                 console.log("It's a hit")
                 this.board.replace(x,y, bd.TILES.values[bd.Board.TILES.HIT])
+                return Messages.ATTACK_HIT
 
-                break;
+                
             case bd.Board.TILES.values[bd.Board.TILES.OCEAN]:
                 console.log("It's a miss")
                 this.board.replace(x,y, bd.Board.TILES.values[bd.Board.TILES.MISS])
-                break;
+                return Messages.ATTACK_MISS
+
             case bd.Board.TILES.values[bd.Board.TILES.MISS]:
                 console.log("Target already attacked")
-                break;
+                return Messages.BAD_ATTACK_COORDS
+
             case bd.Board.TILES.values[bd.Board.TILES.HIT]:
                 console.log("Target already hit")
-                break;
+                return Messages.BAD_ATTACK_COORDS
             
             default:
                 console.log("Invalid target")
+                return Messages.BAD_ATTACK_COORDS
         }
     }
 }

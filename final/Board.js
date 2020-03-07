@@ -10,7 +10,7 @@ class Board {
             let row = []
             for(let j = 0; j < size; j++)
             {
-                row.push(Board.TILES.values[Board.TILES.OCEAN])
+                row.push(Board.TILES.OCEAN)
             }
             board.push(row)
         }
@@ -39,18 +39,10 @@ class Board {
 
 }
 Board.TILES = {
-    OCEAN: 1,
-    BOAT: 2,
-    MISS: 3,
-    HIT: 4,
-    values: {
-        1: "O",
-        2: "B",
-        3: "M",
-        4: "H"
-
-    }
-
+    OCEAN: "O",
+    BOAT: "B",
+    MISS: "M",
+    HIT: "H"
 }
 
 module.exports = {

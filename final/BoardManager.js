@@ -38,7 +38,7 @@ class BoardManager{
             b.startY = y
             for(let i = 0; i < b.length; i++)
             {
-                this.board.replace(x + i, y, bd.Board.TILES.values[bd.Board.TILES.BOAT])
+                this.board.replace(x + i, y,bd.Board.TILES.BOAT)
             }
 
         } else {
@@ -56,7 +56,7 @@ class BoardManager{
             
             for(let i = 0; i < b.length; i++)
             {
-                this.board.replace(x, y + i, bd.Board.TILES.values[bd.Board.TILES.BOAT])
+                this.board.replace(x, y + i, bd.Board.TILES.BOAT)
             }
             
         }
@@ -65,32 +65,41 @@ class BoardManager{
 
     //returns the proper message based in the 
     //respective 
-    takeHit(x, y)
+    async takeHit(x, y)
     {
         let tile = this.board.getTile(x,y)
         switch(tile)
         {
-            case bd.Board.TILES.values[bd.Board.TILES.BOAT]:
-                console.log("It's a hit")
+            case bd.Board.TILES.BOAT:
+                
                 this.board.replace(x,y, bd.TILES.values[bd.Board.TILES.HIT])
-                return Messages.ATTACK_HIT
+                
+                if(!this.boatList[0].isAlive())
+                {
+                    return Messages.GAME_OVER
+                    
+                }else {
+                    this.boatList[0].takeHit()
+                    return Messages.ATTACK_HIT
+                }
+               
 
                 
-            case bd.Board.TILES.values[bd.Board.TILES.OCEAN]:
-                console.log("It's a miss")
-                this.board.replace(x,y, bd.Board.TILES.values[bd.Board.TILES.MISS])
+            case bd.Board.TILES.OCEAN:
+                
+                this.board.replace(x,y, bd.Board.TILES.MISS)
                 return Messages.ATTACK_MISS
 
-            case bd.Board.TILES.values[bd.Board.TILES.MISS]:
-                console.log("Target already attacked")
+            case bd.Board.TILES.MISS:
+                
                 return Messages.BAD_ATTACK_COORDS
 
-            case bd.Board.TILES.values[bd.Board.TILES.HIT]:
-                console.log("Target already hit")
+            case bd.Board.TILES.HIT:
+            
                 return Messages.BAD_ATTACK_COORDS
             
             default:
-                console.log("Invalid target")
+                
                 return Messages.BAD_ATTACK_COORDS
         }
     }

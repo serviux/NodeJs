@@ -6,12 +6,12 @@ game_over = false
 async function main(){
     await host.initAsHost()
 
-    host.display()
+    host.display(clear = false)
 
-    let attack_coords = [0,1] // await host.getInput()
+    let attack_coords = await host.random_coords() // await host.getInput()
     await host.sendAttack(attack_coords)
     
-    
+    host.destroy()    
 }
 
 main()

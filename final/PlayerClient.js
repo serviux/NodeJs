@@ -5,12 +5,11 @@ const client = new player.Player()
 game_over = false
 async function main(){
     await client.initAsClient()
-    
-    client.display()
 
+    client.display(clear=false)
     
 
-    
+
 }
 
 main()

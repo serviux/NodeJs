@@ -10,10 +10,21 @@ class Boat {
         this.startY = -1
         this.isHorizontal = true
 
-        for(let i = 0; i < length;i++)
+        for(let i = 0; i < this.length;i++)
         {
             this.health.push(true)
         }
+    }
+
+    takeHit(){
+        
+        for(let i = 0; i < this.length; i++){
+            if(this.health[i]){
+                this.health[i] = false
+                return true
+            }
+        }
+        return false
     }
 
     isAlive()

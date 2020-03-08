@@ -40,6 +40,7 @@ class BoardManager{
             {
                 this.board.replace(x + i, y,bd.Board.TILES.BOAT)
             }
+            this.boatList.push(b)
 
         } else {
 
@@ -58,6 +59,7 @@ class BoardManager{
             {
                 this.board.replace(x, y + i, bd.Board.TILES.BOAT)
             }
+            this.boatList.push(b)
             
         }
     }
@@ -73,13 +75,13 @@ class BoardManager{
             case bd.Board.TILES.BOAT:
                 
                 this.board.replace(x,y, bd.Board.TILES.HIT)
-                
+                this.boatList[0].takeHit()
                 if(!this.boatList[0].isAlive())
                 {
                     return Messages.GAME_OVER
                     
                 }else {
-                    this.boatList[0].takeHit()
+                    
                     return Messages.ATTACK_HIT
                 }
                

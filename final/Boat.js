@@ -30,7 +30,7 @@ class Boat {
     isAlive()
     {
         
-        for(i = 0; i < this.health.length; i++)
+        for(let i = 0; i < this.health.length; i++)
         {
             if(this.health[i])
             {

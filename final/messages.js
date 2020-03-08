@@ -6,7 +6,8 @@ const MESSAGES =  {
     BAD_ATTACK_COORDS: 2,
     ATTACK_HIT: 3,
     ATTACK_MISS: 4,
-    ATTACK_RESPONSE: 5
+    ATTACK_RESPONSE: 5,
+    OP_TURN_ENDED: 6
 
 }
 

@@ -1,44 +1,18 @@
 const inq = require("inquirer")
-const zmq = require("zeromq")
 const Messages = require("./messages").MESSAGES;
 const tiles = require("./Board").Board.TILES
 const mgr = require("./BoardManager")
 const bt = require("./Boat")
 
 class Player {
-    constructor() {
+    constructor(name = "") {
         this.PlayerBoard = new mgr.BoardManager()
     	this.hasUserInput = false
 	    this.EnemyBoard = new mgr.BoardManager()
         let boat = new bt.Boat(3)
         this.PlayerBoard.addBoat(boat)
+        this.name = name
         
-    }
-    async initAsHost(){
-        this.sock = zmq.socket("req")
-        await this.sock.connect("tcp://127.0.0.1:5000")
-        this.sock.on("message", this.handle_response)
-
-        
-    } 
-    async initAsClient(){
-        this.sock = zmq.socket("rep")
-        this.sock = this.sock.bind("tcp://127.0.0.1:5000")
-        this.sock.on("message", this.handle_response)
-    }
-
-    
-    async sendAttack(attack_coords)
-    {
-        let msg_str = ""
-        msg_str += Messages.ATTACK + ":" 
-        msg_str += attack_coords.join(",") 
-        this.sock.send(msg_str)
-    }
-
-    async sendBadCoords(msg)
-    {
-        this.sock.send(msg)
     }
 
     async random_coords(){
@@ -47,10 +21,18 @@ class Player {
         return [x, y] 
     }
 
-    async handle_response(resp_message)
+    async prepare_attack_message(attack_coords)
     {
-        let encoded = await resp_message.toString()
-        let message_type = parseInt(encoded.split(":")[0])
+        let str = ""
+        str += Messages.ATTACK.toString()
+        str += ":" + await attack_coords.join(",")
+        return str
+    }
+
+    async update_player(resp_message)
+    {
+        
+        let message_type = parseInt(resp_message.split(":")[0])
        
 
         switch(message_type)
@@ -59,21 +41,20 @@ class Player {
             case Messages.ATTACK:
                 //given string "1:1,1"
                 //msg_coords = [0, 1]
-                let msg_coords = encoded.split(":")[1].split(',').map( x=> parseInt(x))
-                console.log(this)
-                let handled_message = await PlayerBoard.takeHit(msg_coords[0], msg_coords[1])
+                let msg_coords = resp_message.split(":")[1].split(',').map( x=> parseInt(x))
+                let handled_message = await this.PlayerBoard.takeHit(msg_coords[0], msg_coords[1])
                 
                 //send different types of responses based on the taking damage
                 //functionality
                 if (handled_message === Messages.BAD_ATTACK_COORDS) {
-                    bad_coords = `${Messages.BAD_ATTACK_COORDS}:${msg_coords.join(',')}`
-                    this.sendBadCoords(bad_coords)
+                    let bad_coords = `${Messages.BAD_ATTACK_COORDS}:${msg_coords.join(',')}`
+                    return bad_coords
                 } else if (handled_message === Messages.ATTACK_MISS){
-                    miss_coords = `${Messages.BAD_ATTACK_COORDS}:${msg_coords.join(',')}`
-                    this.sock.send(miss_coords)
+                    let miss_coords = `${Messages.BAD_ATTACK_COORDS}:${msg_coords.join(',')}`
+                    return miss_coords
                 } else if (handled_message === Messages.ATTACK_HIT){
-                    hit_coords = `${Messages.ATTACK_HIT}:${msg_coords.join(",")}`
-                    this.sock.send(hit_coords)
+                    let hit_coords = `${Messages.ATTACK_HIT}:${msg_coords.join(",")}`
+                    return hit_coords
                 } 
                 
                 break;
@@ -99,9 +80,13 @@ class Player {
 
 
             case Messages.BAD_ATTACK_COORDS:
-                let new_coords = await this.getInput()
-                await this.sendAttack(new_coords)
-                break;
+                //TODO check if coords were in bounds
+                let coords = resp_message.split(":")[1].split(",").map( x => parseInt(x))
+                let new_coords = this.random_coords()
+                let attack_msg = `${Messages.ATTACK}:${(await new_coords).join(',')}`
+
+
+                return attack_msg
             
 
 
@@ -115,7 +100,6 @@ class Player {
                     console.log("You lost")
                 }
                 
-                this.destroy()
                 console.log("Game Ended ")
                 break;
 
@@ -158,9 +142,6 @@ class Player {
 	return coords
     }
 
-    async destroy(){
-        this.sock.close()
-    }
 
 }
 

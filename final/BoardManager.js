@@ -72,7 +72,7 @@ class BoardManager{
         {
             case bd.Board.TILES.BOAT:
                 
-                this.board.replace(x,y, bd.TILES.values[bd.Board.TILES.HIT])
+                this.board.replace(x,y, bd.Board.TILES.HIT)
                 
                 if(!this.boatList[0].isAlive())
                 {
